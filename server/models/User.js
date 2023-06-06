@@ -2,53 +2,65 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
-    username: {
+  username: {
+    type: String,
+    required: [true, "Username cannot be blank."],
+    unique: true,
+    trim: true,
+  },
+  firstName: {
+    type: String,
+    required: [true, "Name cannot be blank"],
+  },
+  email: {
+    type: String,
+    required: [true, "Email cannot blank"],
+    unique: true,
+    match: [/.+@.+\..+/, "Must match an email address!"],
+  },
+  password: {
+    type: String,
+    required: [true, "Password cannot be blank"],
+    minlength: 5,
+  },
+  friends: [
+    {
+      username: {
         type: String,
-        required: [true, 'Username cannot be blank.'],
-        unique: true,
-        trim: true,
+        required: true,
+      },
     },
-    firstName: {
+  ],
+  trips: [
+    {
+      destination: {
         type: String,
-        required: [true, 'Name cannot be blank'],
+        required: true,
+      },
+      time: {
+        type: Date,
+        required: true,
+      },
     },
-    email: {
-        type: String,
-        required: [true, 'Email cannot blank'],
-        unique: true,
-        match: [/.+@.+\..+/, 'Must match an email address!'],
+  ],
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Post",
     },
-    password: {
-        type: String,
-        required: [true, 'Password cannot be blank'],
-        minlength: 5,
+  ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
     },
-    friends: [
-        {
-            username: {
-                type: String,
-                required: true,
-            },
-        },
-    ],
-    posts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Post', 
-        },
-    ],
-    comments: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Comment',
-        },
-    ],
-    messages: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Message',
-        },
-    ],
+  ],
+  messages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Message",
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {

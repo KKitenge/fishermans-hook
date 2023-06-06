@@ -23,10 +23,30 @@ const userSchema = new Schema({
         required: [true, 'Password cannot be blank'],
         minlength: 5,
     },
+    friends: [
+        {
+            username: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
     posts: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Post',
+            ref: 'Post', 
+        },
+    ],
+    comments: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Comment',
+        },
+    ],
+    messages: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Message',
         },
     ],
 });

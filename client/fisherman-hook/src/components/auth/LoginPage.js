@@ -1,46 +1,72 @@
 // imported necessary modules
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { login } from '../../actions/auth';
+import { useMutation } from 'react-redux';
+import { LOGIN_USER } from '../../utils/mutations';
+import Auth from '../../actions/auth';
 
 // Login page component
 const LoginPage = () => {
-    // dispatch hook
-    const dispatch = useDispatch();
-    // state hooks
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    // handle submit function
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(login(email, password));
+    const [formState, setFormState] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
+    const [login, { error, data }] = useMutation(LOGIN_USER);
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
     };
+
+    // submit form
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        console.log(formState);
+
+        try {
+            const { data } = await login({
+                variables: {...formState}
+            });
+
+            Auth.login(data.login.token);
+        } catch (err) {
+            console.error(err);
+        }
+
+        // clear form values
+        setFormState({
+            username: '',
+            email: '',
+            password: '',
+        });
+    };
+
     // return jsx, form for email and password
     return (
         <main className="login-page">
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleFormSubmit}>
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formState.email}
+                    onChange={handleInputChange}
                 />
-            </form>
-            <form onSubmit={handleSubmit}>
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    value={formState.password}
+                    onChange={handleInputChange}
                 />
+                <button type="submit">Login</button>
             </form>
-            <button type="submit" onClick={handleSubmit}>
-                Login
-            </button>
             <p>
                 Don't have an account? <Link to="/register">Register</Link>
             </p>

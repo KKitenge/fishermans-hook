@@ -1,7 +1,6 @@
 import React from "react";
 import LoginPage from "./LoginPage";
 import SignupPage from "./SignupPage";
-import Logout from "./Logout";
 
 const AuthPage = () => {
   return (
@@ -11,7 +10,6 @@ const AuthPage = () => {
       </h1>
       <LoginPage />
       <SignupPage />
-      <Logout />
     </div>
   );
 };

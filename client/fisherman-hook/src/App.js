@@ -9,16 +9,16 @@ import { setContext } from "@apollo/client/link/context";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
-import SignupPage from "./components/auth/SignupPage";
-import HomePage from "./components/home/HomePage";
-import LoginPage from "./components/auth/LoginPage";
-import ProfilePage from "./components/profile/ProfilePage";
-import Messages from "./components/messages/Messages";
-import Posts from "./components/posts/Posts";
-import Trips from "./components/trips/Trips";
-import Friends from "./components/friends/Friends";
-import Forecast from "./components/forecast/Forecast";
-import Logout from "./components/auth/Logout";
+import Signup from "./components/auth/Signup";
+import LandingPage from "./components/auth/LandingPage";
+import Login from "./components/auth/Login.js";
+import ProfilePage from "./components/profile/ProfilePage.js";
+import Messages from "./components/messages/Messages.js";
+import Posts from "./components/posts/Posts.js";
+import Trips from "./components/trips/Trips.js";
+import Friends from "./components/friends/Friends.js";
+import Forecast from "./components/forecast/Forecast.js";
+import Logout from "./components/auth/Logout.js";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -45,9 +45,9 @@ function App() {
       <Router>
         <div>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/posts" element={<Posts />} />

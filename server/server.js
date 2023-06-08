@@ -1,5 +1,4 @@
-import db from "./config/connections.js";
-
+const db = require("./config/connections.js");
 const { typeDefs, resolvers } = require("./schemas/index");
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
@@ -14,6 +13,7 @@ const server = new ApolloServer({
   resolvers,
 
   context: authMiddleware,
+  playground: true,
 });
 
 if (process.env.NODE_ENV === "production") {

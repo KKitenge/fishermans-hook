@@ -1,6 +1,7 @@
 import React from "react";
 import Login from "./Login";
 import Signup from "./Signup";
+import Footer from "../common/Footer.js";
 
 const LandingPage = () => {
   return (
@@ -9,6 +10,7 @@ const LandingPage = () => {
       <p>Explore the best fishing spots and connect with fellow anglers.</p>
       <Signup />
       <Login />
+      <Footer />
     </div>
   );
 };

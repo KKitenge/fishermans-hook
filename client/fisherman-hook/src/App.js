@@ -18,7 +18,7 @@ import Posts from "./components/posts/Posts.js";
 import Trips from "./components/trips/Trips.js";
 import Friends from "./components/friends/Friends.js";
 import Forecast from "./components/forecast/Forecast.js";
-import Logout from "./components/auth/Logout.js";
+import Logout from "./components/home/Logout.js";
 
 const httpLink = createHttpLink({
   uri: "/graphql",

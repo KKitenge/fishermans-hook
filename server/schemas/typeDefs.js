@@ -12,7 +12,6 @@ const typeDefs = gql`
         posts: [Post]
         comments: [Comment]
         messages: [Message]
-
     }
 
     type Post {

@@ -25,7 +25,7 @@ const resolvers = {
         .populate("messages");
     },
     // get a user by username
-    user: async (parent, { username }) => {
+    getUserByName: async (parent, { username },context) => {
       return User.findOne({ username })
         .select("-__v -posts -comments -messages -trips")
         .populate("friends")
@@ -36,40 +36,44 @@ const resolvers = {
     },
 
     // get a user by _id
-    me: async (parent, args, context) => {
+    me: async (parent, {_id}, context) => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
+        const user = await User.findById(_id || { _id: context.user._id})
           .select("-__v -posts -comments -messages -trips")
-          .populate("friends")
-          .populate("trips")
-          .populate("posts")
-          .populate("comments")
-          .populate("messages");
-        return userData;
+          .populate({path:"friends", model:"User"})
+          .populate({path:"trips", model:"Trip"})
+          .populate({path:"posts", model:"Post"})
+          .populate({path:"comments", model:"Comment"})
+          .populate({path:"messages", model:"Message"});
+        return user;
       }
       throw new AuthenticationError("Not logged in");
     },
 
     // get all posts
-    posts: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Post.find(params).sort({ createdAt: -1 });
+    getAllPosts: async (parent, args) => {
+   return await Post.find().sort({ createdAt: -1 });
     },
 
     // get a post by _id
-    post: async (parent, { postId }) => {
+    getPostById: async (parent, { postId }) => {
       const params = postId ? { postId } : {};
       if (!postId) {
         throw new Error("No post found with this id!");
       }
-      return Post.findOne(params);
+      return await Post.findById(params)
+       .populate("postAuthor")
+        .populate("comments");
+      
     },
 
     // get comments by postId
-    comments: async (parent, { postId }) => {
-      const params = postId ? { postId } : {};
-      return Comment.find(params).sort({ createdAt: -1 });
+   
+      getCommentsByPost: async (parent, { postId },context) => {
+      const params = postId ? { postId: parent.id } : {};
+      return (await context.Comment.find(params).sort({ createdAt: -1 }));
     },
+ 
 
     // get a comment by _id
     comment: async (parent, { commentId }) => {
@@ -108,7 +112,7 @@ const resolvers = {
     // getOpenAI
     ChatCompletion: async (parent, { model, amessage }) => {
       const completion = await openai.createChatCompletion({
-        model: model,
+        model:  model,
         prompt: {
           prompt:
             "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: I'd like to cancel my subscription.\nAI:",
@@ -119,6 +123,11 @@ const resolvers = {
           stop: ["\n", " Human:", " AI:"],
         },
         amessage: amessage,
+      });
+      return completion;
+    },
+  },
+        
 
         Mutation: {
           // login a user
@@ -134,7 +143,33 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
           },
+          updateUserAgreement: async (parent,{email,hasAgreed}, context)=>{
+            if(context.user){
+                try{
+                  const user = await User.findOneAndUpdate(
+                    {email: context.user.email},
+                    {$push:{'UserAgreement.hasAgreed':hasAgreed}},
+                    {hasAgreed},
+                    {new: true}
+                  );
+                  if(!user){
+                    throw new Error('User not found');
+                  }
+                  return {
+                    email: user.email,
+                    hasAgreed: user.userAgreement.hasAgreed,
+                  };
 
+                } catch(error){
+                  throw new Error(error);
+                }
+                
+              }else {
+                  throw new Error('Not Authenticated');
+                }
+                
+            }
+          },
           // add a user
           addUser: async (parent, { username, firstName, email, password }) => {
             const user = await User.create({
@@ -296,10 +331,10 @@ const resolvers = {
               throw new Error(error);
             }
           },
-        },
-      });
-    },
-  },
-};
+        };
+    
+   
+ 
+
 
 module.exports = resolvers;

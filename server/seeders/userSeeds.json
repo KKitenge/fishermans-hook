@@ -21,6 +21,13 @@
         "destination": "Tokyo",
         "time": "2023-08-15"
       }
+    ],
+    "posts": [
+      {
+        "postTitle": "What type of fish is this?",
+        "postText": "This is my first post.",
+        "postAuthor": "AMay"
+      }
     ]
   },
   {

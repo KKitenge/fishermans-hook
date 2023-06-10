@@ -9,7 +9,7 @@ const typeDefs = gql`
         email: String!
         friends: [User]
         trips: [Trip]
-        posts: [Post]
+        posts: [Post]!
         comments: [Comment]
         messages: [Message]
 
@@ -127,16 +127,12 @@ const typeDefs = gql`
       }
   
 
-    
-    
-
-
     type Query {
         me: User
         users: [User]
         user(username: String!): User
         post(_id: ID!): Post
-        posts: [Post]
+        posts(username: String): [Post]
         comments(postId: ID!): [Comment]
         comment(commentId: ID!): Comment
         messages(userId:ID!):[Message]
@@ -146,11 +142,6 @@ const typeDefs = gql`
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
         ChatCompletion(model: String!, amessages: [AMessagesInput!]!): ChatCompletion
-        
-        
-       
-
-    
     }
 
     type Mutation {

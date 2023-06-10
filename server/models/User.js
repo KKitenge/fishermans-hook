@@ -45,10 +45,26 @@ const userSchema = new Schema({
   ],
   posts: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Post",
-    },
+      postTitle: {
+        type: String,
+        required: true,
+      },
+      postText: {
+        type: String,
+        required: true,
+      },
+      postAuthor: {
+        type: String,
+        required: true,
+      },
+    }
   ],
+  // posts: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "Post",
+  //   },
+  // ],
   comments: [
     {
       type: Schema.Types.ObjectId,

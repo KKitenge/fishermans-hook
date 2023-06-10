@@ -67,8 +67,6 @@ const typeDefs = gql`
         iconPhrase: String
     }
 
-        
-
     type Weather {
         weatherText: String!
         temperature: Temperature!
@@ -125,16 +123,11 @@ const typeDefs = gql`
         content: String!
       }
   
-
-    
-    
-
-
     type Query {
         me: User
         users: [User]
         user(username: String!): User
-        post(postId: ID!): Post
+        post(_id: ID!): Post
         posts: [Post]
         comments(postId: ID!): [Comment]
         comment(commentId: ID!): Comment
@@ -145,11 +138,6 @@ const typeDefs = gql`
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
         ChatCompletion(model: String!, amessages: [AMessagesInput!]!): ChatCompletion
-        
-        
-       
-
-    
     }
 
     type Mutation {

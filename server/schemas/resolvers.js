@@ -57,17 +57,17 @@ const resolvers = {
     },
 
     // get a post by _id
-    post: async (parent, { postId }) => {
-      const params = postId ? { postId } : {};
-      if (!postId) {
+    post: async (parent, { _id }) => {
+      const params = _id ? { _id } : {};
+      if (!_id) {
         throw new Error("No post found with this id!");
       }
       return Post.findOne(params);
     },
 
-    // get comments by postId
-    comments: async (parent, { postId }) => {
-      const params = postId ? { postId } : {};
+    // get comments by _id
+    comments: async (parent, { _id }) => {
+      const params = _id ? { _id } : {};
       return Comment.find(params).sort({ createdAt: -1 });
     },
 
@@ -182,10 +182,10 @@ const resolvers = {
           },
 
           // add a comment
-          addComment: async (parent, { postId, commentBody }, context) => {
+          addComment: async (parent, { _id, commentBody }, context) => {
             if (context.user) {
               const updatedPost = await Post.findOneAndUpdate(
-                { _id: postId },
+                { _id: _id },
                 {
                   $push: {
                     comments: { commentBody, username: context.user.username },
@@ -237,19 +237,19 @@ const resolvers = {
           },
 
           // remove a post
-          removePost: async (parent, { postId }, context) => {
+          removePost: async (parent, { _id }, context) => {
             const user = await User.findOneAndUpdate(
               { _id: context.user._id },
-              { $pull: { posts: postId } },
+              { $pull: { posts: _id } },
               { new: true }
             );
             return user;
           },
 
           // remove a comment
-          removeComment: async (parent, { postId, commentId }, context) => {
+          removeComment: async (parent, { _id, commentId }, context) => {
             const updatedPost = await Post.findOneAndUpdate(
-              { _id: postId },
+              { _id: _id },
               { $pull: { comments: { _id: commentId } } },
               { new: true }
             );

@@ -1,21 +1,29 @@
 const db = require('../config/connections');
 const { User, Post, Message } = require('../models');
-
-const userData = require('../seeders/userSeeds.json');
-const postData = require('../seeders/postSeeds.json');
-const messageData = require('../seeders/messageSeeds.json');
+const userSeeds = require('./userSeeds.json');
+const postSeeds = require('./postSeeds.json');
+const messageSeeds = require('./messageSeeds.json');
 
 db.once('open', async () => {
-    //clean database
+  try {
+    // Clean the database
     await User.deleteMany({});
     await Post.deleteMany({});
     await Message.deleteMany({});
 
-     // bulk create each model
-     const users = await User.insertMany(userData);
-     const posts = await Post.insertMany(postData);
-     const messages = await Message.insertMany(messageData);
+    // Bulk create users
+    const users = await User.insertMany(userSeeds);
 
-     console.log('Seeding completed successfully.');
-     process.exit(0);
+    // Bulk create posts
+    const posts = await Post.insertMany(postSeeds);
+
+    // Bulk create messages
+    const messages = await Message.insertMany(messageSeeds);
+
+    console.log('Seeding completed successfully.');
+    process.exit(0);
+  } catch (error) {
+    console.error('Seeding failed:', error);
+    process.exit(1);
+  }
 });

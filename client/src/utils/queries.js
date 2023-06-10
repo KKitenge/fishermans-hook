@@ -122,6 +122,11 @@ export const QUERY_USER = gql`
         commentAuthor
         createdAt
       }
+      messages {
+        _id
+        messageText
+        messageAuthor
+        createdAt
     }
   }
 `;

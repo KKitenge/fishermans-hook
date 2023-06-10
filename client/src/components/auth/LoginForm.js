@@ -2,22 +2,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER, } from "../../utils/mutations";
+import { LOGIN_USER } from "../../utils/mutations";
+import { TermsCheckbox } from "../../utils/";
 import Auth from "../../utils/auth";
 
-// Login page component
-const LoginPage = () => {
+// Login form component
+const LoginForm = () => {
+  const [login, { error, data }] = useMutation(LOGIN_USER);
   const [formState, setFormState] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const [login, {error,data}] = useMutation(LOGIN_USER);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
-    setFormState((initialState)=>({
+    setFormState((initialState) => ({
       ...initialState,
       [name]: value,
     }));
@@ -34,10 +36,7 @@ const LoginPage = () => {
       });
 
       Auth.login(data.login.token);
-    } 
-    
-    
-    catch (err) {
+    } catch (err) {
       console.error(err);
     }
 
@@ -68,7 +67,9 @@ const LoginPage = () => {
           value={formState.password}
           onChange={handleInputChange}
         />
-        <button type="submit">Login</button>
+        
+         <TermsCheckbox  onChange={(isChecked) => setTermsAccepted(isChecked)} />
+      <button type="submit" disabled={!termsAccepted}{...data?(<Link to="/profile"></Link>):error}>Login</button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register</Link>
@@ -77,4 +78,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginForm;

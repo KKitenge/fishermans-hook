@@ -1,15 +1,15 @@
+import React, { useState } from "react";
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
 import {UPDATE_USER_AGREEMENT} from '../../utils/mutations';
 
-const TermsCheckbox = ({ userId }) => {
+const TermsCheckbox = ({ email, }) => {
     const [updateUserAgreement, { loading, error }] = useMutation(UPDATE_USER_AGREEMENT);
     const [isChecked, setIsChecked] = useState(false);
   
     const handleCheck = async (e) => {
       setIsChecked(e.target.checked);
       if (e.target.checked) {
-        await updateUserAgreement({ variables: { userId, hasAgreed: true } });
+        await updateUserAgreement({ variables: { email, hasAgreed: true } });
       }
     }
   
@@ -24,6 +24,6 @@ const TermsCheckbox = ({ userId }) => {
         </label>
       </div>
     );
-  }
+  };
   
   export default TermsCheckbox;

@@ -183,7 +183,7 @@ const typeDefs = gql`
         removeTrip(tripId: ID!): Trip
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
-        updateUserAgreement(email:String!,hasAgreed:Boolean!)UserAgreement
+        updateUserAgreement(email:String!,hasAgreed:Boolean!):UserAgreement
         
     }
     

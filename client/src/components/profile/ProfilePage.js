@@ -1,6 +1,7 @@
 import React from "react";
 import ProfileHeader from "./ProfileHeader";
 import FriendList from "../friends/Friends";
+import ChatApp from "../messages/Messages";
 
 const ProfilePage = ({ userInfo, userPosts, plannedTrips }) => {
   return (
@@ -39,6 +40,9 @@ const ProfilePage = ({ userInfo, userPosts, plannedTrips }) => {
               </li>
             ))}
           </ul>
+        </div>
+        <div className="messages">
+          <ChatApp />
         </div>
       </div>
     </div>

@@ -33,7 +33,9 @@ export default class AuthService {
     // Created a method to login the user
     login(idToken) {
         localStorage.setItem('id_token', idToken);
-        window.location.assign('/');
+        // this will reload the page and reset the state of the application
+        // the user will be logged in before the page refreshes
+        window.location.assign('/homepage');
     }
 
     // Created a method to logout the user

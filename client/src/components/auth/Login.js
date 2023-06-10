@@ -1,6 +1,5 @@
 // imported necessary modules
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutations";
 import Auth from "../../utils/auth";
@@ -8,7 +7,6 @@ import Auth from "../../utils/auth";
 // Login page component
 const LoginPage = () => {
   const [formState, setFormState] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -40,7 +38,6 @@ const LoginPage = () => {
 
     // clear form values
     setFormState({
-      username: "",
       email: "",
       password: "",
     });
@@ -67,9 +64,6 @@ const LoginPage = () => {
         />
         <button type="submit">Login</button>
       </form>
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
     </main>
   );
 };

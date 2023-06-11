@@ -12,13 +12,22 @@ const typeDefs = gql`
         posts: [Post]
         comments: [Comment]
         messages: [Message]
+        userAgreement:[UserAgreement]
+
+    }
+
+    type UserAgreement{
+        _id:ID!
+        user:User!
+        hasAgreed: Boolean!
+        date:String!
     }
 
     type Post {
         _id: ID
         postTitle: String!
         postText: String!
-        postAuthor: String!
+        postAuthor: [User]
         createdAt: String
         comments: [Comment]
     }
@@ -28,12 +37,14 @@ const typeDefs = gql`
         commentText: String!
         commentAuthor: String!
         createdAt: String
+        postId: ID!
     }
 
     type Message {
         id: ID
         messageText: String!
         messageAuthor: String!
+        recipient: [User]
         createdAt: String
     }
 
@@ -107,6 +118,7 @@ const typeDefs = gql`
         model: String!
         usage: Usage!
         choices: [Choice!]!
+     
       }
     
       type Usage {
@@ -116,7 +128,7 @@ const typeDefs = gql`
       }
     
       type Choice {
-        amessages: AMessages!
+        amessages: [AMessages!]
         finish_reason: String!
       }
     
@@ -124,6 +136,9 @@ const typeDefs = gql`
         role: String!
         content: String!
       }
+      
+
+
   
 
     
@@ -153,7 +168,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        createChatCompletion(model: String!, amessages: [AMessagesInput!]!): ChatCompletion
+        createChatCompletion(model: String!, amessages: [AMessagesInput!]!): ChatCompletion!
         addUser(username: String!, firstName: String!, email: String!, password: String!): Auth
         login(email: String!, password: String!): Auth
         addPost(postTitle: String!, postText: String!): Post
@@ -168,6 +183,7 @@ const typeDefs = gql`
         removeTrip(tripId: ID!): Trip
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
+        updateUserAgreement(email:String!,hasAgreed:Boolean!):UserAgreement
         
     }
     

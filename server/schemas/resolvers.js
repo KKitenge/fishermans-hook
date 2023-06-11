@@ -74,9 +74,9 @@ const resolvers = {
     },
 
     // get a comment by _id
-    comment: async (parent, { commentId }) => {
-      const params = commentId ? { commentId } : {};
-      if (!commentId) {
+    comment: async (parent, { _id }) => {
+      const params = _id ? { _id } : {};
+      if (!_id) {
         throw new Error("No comment found with this id!");
       }
 
@@ -266,15 +266,17 @@ const resolvers = {
     return user;
   },
 
-  // remove a comment
-  removeComment: async (parent, { postId, commentId }, context) => {
-    const updatedPost = await Post.findOneAndUpdate(
-      { _id: postId },
-      { $pull: { comments: { _id: commentId } } },
-      { new: true }
-    );
-    return updatedPost;
-  },
+
+          // remove a comment
+          removeComment: async (parent, { postId, _id }, context) => {
+            const updatedPost = await Post.findOneAndUpdate(
+              { _id: postId },
+              { $pull: { comments: { _id: _id } } },
+              { new: true }
+            );
+            return updatedPost;
+          },
+
 
   // remove a friend
   removeFriend: async (parent, { friendId }, context) => {

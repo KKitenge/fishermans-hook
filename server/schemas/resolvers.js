@@ -25,7 +25,7 @@ const resolvers = {
         .populate("messages");
     },
     // get a user by username
-    getUserByName: async (parent, { username }, context) => {
+    users: async (parent, { username }, context) => {
       return User.findOne({ username })
         .select("-__v -posts -comments -messages -trips")
         .populate("friends")
@@ -51,7 +51,7 @@ const resolvers = {
     },
 
     // get all posts
-    getAllPosts: async (parent, args) => {
+    posts: async (parent, args) => {
       return await Post.find().sort({ createdAt: -1 });
     },
 
@@ -68,7 +68,7 @@ const resolvers = {
 
     // get comments by postId
 
-    getCommentsByPost: async (parent, { postId }, context) => {
+    comments: async (parent, { postId }, context) => {
       const params = postId ? { postId: parent.id } : {};
       return await context.Comment.find(params).sort({ createdAt: -1 });
     },

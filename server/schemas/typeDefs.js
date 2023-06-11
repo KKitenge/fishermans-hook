@@ -13,7 +13,6 @@ const typeDefs = gql`
         comments: [Comment]
         messages: [Message]
         userAgreement:[UserAgreement]
-
     }
 
     type UserAgreement{
@@ -27,7 +26,7 @@ const typeDefs = gql`
         _id: ID
         postTitle: String!
         postText: String!
-        postAuthor: [User]
+        postAuthor: String!
         createdAt: String
         comments: [Comment]
     }
@@ -78,8 +77,6 @@ const typeDefs = gql`
         iconPhrase: String
     }
 
-        
-
     type Weather {
         weatherText: String!
         temperature: Temperature!
@@ -93,7 +90,6 @@ const typeDefs = gql`
         Value: Float
         Unit: String
     }
-
 
     type Trip {
         id: ID
@@ -109,42 +105,33 @@ const typeDefs = gql`
     input AMessagesInput {
         role: String!
         content: String!
-      }
+    }
     
-      type ChatCompletion {
+    type ChatCompletion {
         id: ID!
         object: String!
         created: Int!
         model: String!
         usage: Usage!
         choices: [Choice!]!
-     
-      }
-    
-      type Usage {
+    }
+
+    type Usage {
         prompt_tokens: Int!
         completion_tokens: Int!
         total_tokens: Int!
-      }
-    
-      type Choice {
+    }
+
+    type Choice {
         amessages: [AMessages!]
         finish_reason: String!
-      }
-    
-      type AMessages {
+    }
+
+    type AMessages {
         role: String!
         content: String!
-      }
+    }
       
-
-
-  
-
-    
-    
-
-
     type Query {
         me: User
         users: [User]
@@ -160,11 +147,6 @@ const typeDefs = gql`
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
         ChatCompletion(model: String!, amessages: [AMessagesInput!]!): ChatCompletion
-        
-        
-       
-
-    
     }
 
     type Mutation {
@@ -184,7 +166,6 @@ const typeDefs = gql`
         getWeather(locationKey: String!): Weather
         getForecast(city: String!): Forecast
         updateUserAgreement(email:String!,hasAgreed:Boolean!):UserAgreement
-        
     }
     
 `;

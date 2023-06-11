@@ -11,6 +11,16 @@
       {
         "username": "CJuly"
       }
+    ],
+    "trips": [
+      {
+        "destination": "Guatemala",
+        "time": "2023-06-01"
+      },
+      {
+        "destination": "Tokyo",
+        "time": "2023-08-15"
+      }
     ]
   },
   {
@@ -24,6 +34,16 @@
       },
       {
         "username": "CJuly"
+      }
+    ],
+    "trips": [
+      {
+        "destination": "Belize",
+        "time": "2023-07-10"
+      },
+      {
+        "destination": "Caltalina Island",
+        "time": "2023-09-20"
       }
     ]
   },
@@ -39,6 +59,17 @@
       {
         "username": "BJune"
       }
+    ],
+    "trips": [
+      {
+        "destination": "Canada",
+        "time": "2023-10-01"
+      },
+      {
+        "destination": "California",
+        "time": "2023-02-16"
+      }
     ]
   }
 ]
+

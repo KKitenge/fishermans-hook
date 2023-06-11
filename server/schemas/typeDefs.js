@@ -148,10 +148,10 @@ const typeDefs = gql`
     type Query {
         me: User
         users: [User]
-        getUserByName(username: String!): User
-        getPostById(postId: ID!): Post
-        getAllPosts: [Post]
-        getCommentsByPost(postId: ID!): [Comment]
+        user(username: String!): User
+        post(_id: ID!): Post
+        posts: [Post]
+        comments(postId: ID!): [Comment]
         comment(commentId: ID!): Comment
         messages(userId:ID!):[Message]
         message(messageId: ID!): Message

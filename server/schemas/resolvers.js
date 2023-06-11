@@ -56,9 +56,9 @@ const resolvers = {
     },
 
     // get a post by _id
-    getPostById: async (parent, { postId }) => {
-      const params = postId ? { postId } : {};
-      if (!postId) {
+    post: async (parent, { _id }) => {
+      const params = _id ? { _id } : {};
+      if (!_id) {
         throw new Error("No post found with this id!");
       }
       return await Post.findById(params)

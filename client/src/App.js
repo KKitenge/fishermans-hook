@@ -10,7 +10,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Signup from "./components/auth/Signup";
 import LandingPage from "./components/auth/LandingPage";
-import Login from "./components/auth/LoginForm.js";
+import Login from "./components/auth/Login.js";
+// import LoginForm from "./components/auth/LoginForm.js";
 import ProfilePage from "./components/profile/ProfilePage.js";
 import Messages from "./components/messages/ChatWidget.js";
 import Posts from "./components/posts/Posts.js";
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
+            {/* <Route path="/loginform" element={<LoginForm />} /> */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/messages" element={<Messages />} />

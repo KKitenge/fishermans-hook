@@ -1,7 +1,8 @@
 import React from "react";
-import ProfileHeader from "../components/profile/ProfileHeader";
-import FriendList from "../components/friends/Friends";
+import ProfileHeader from "../../components/profile/ProfileHeader";
+import FriendList from "../../components/friends/Friends";
 
+// ProfilePage component
 const ProfilePage = ({ userInfo, userPosts, plannedTrips }) => {
   return (
     <div className="profile-page">

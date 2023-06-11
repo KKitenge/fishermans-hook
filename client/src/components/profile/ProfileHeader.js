@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
+// ProfileHeader component
 const ProfileHeader = () => {
+  // useState to set the isMenuOpen
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // toggleMenu function
   const toggleMenu = () => {
+    // setIsMenuOpen to the opposite of isMenuOpen
     setIsMenuOpen(!isMenuOpen);
   };
 

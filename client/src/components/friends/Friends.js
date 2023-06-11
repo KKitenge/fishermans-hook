@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const FriendList = () => {
   const [friendList, setFriendList] = useState([]);
 
+  // Commented out because it is not used. May need to be implemented later.
   const addFriend = (friend) => {
     setFriendList((prevFriendList) => [...prevFriendList, friend]);
   };
@@ -15,19 +16,10 @@ const FriendList = () => {
 
   return (
     <div>
-      <h2>Friends List</h2>
-      {friendList.length > 0 ? (
-        <ul>
-          {friendList.map((friend) => (
-            <li key={friend.id}>
-              {friend.name}
-              <button onClick={() => removeFriend(friend.id)}>Remove</button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No friends in the list.</p>
-      )}
+      <h2>FriendList</h2>
+      <p>Friends List: {friendList}</p>
+      <button onClick={() => addFriend("Friend")}>Add Friend</button>
+      <button onClick={() => removeFriend("Friend")}>Remove Friend</button>
     </div>
   );
 };

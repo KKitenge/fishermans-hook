@@ -1,5 +1,6 @@
 import React from "react";
 
+// This is the footer that is displayed on every page
 const Footer = () => {
   return (
     <footer className="footer">

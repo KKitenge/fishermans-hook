@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Logout component
+// This component is used to log the user out of the application
 const Logout = () => {
   const navigate = useNavigate();
 

@@ -49,40 +49,39 @@ export const QUERY_ME = gql`
 `;
 
 export const QUERY_USERS = gql`
-    query users {
-        users {
-            _id
-            username
-            firstName
-            email
-            friends {
-                _id
-                username
-                firstName
-                email
-            }
-            trips {
-                _id
-                tripText
-                username
-                createdAt
-            }
-            posts {
-                _id
-                postTitle
-                postText
-                postAuthor
-                createdAt
-                comments {
-                    _id
-                    commentText
-                    commentAuthor
-                    createdAt
-                }
-
-            
+  query users {
+    users {
+      _id
+      username
+      firstName
+      email
+      friends {
+        _id
+        username
+        firstName
+        email
+      }
+      trips {
+        _id
+        tripText
+        username
+        createdAt
+      }
+      posts {
+        _id
+        postTitle
+        postText
+        postAuthor
+        createdAt
+        comments {
+          _id
+          commentText
+          commentAuthor
+          createdAt
         }
+      }
     }
+  }
 `;
 
 export const QUERY_USER = gql`
@@ -123,6 +122,11 @@ export const QUERY_USER = gql`
         commentAuthor
         createdAt
       }
+      messages {
+        _id
+        messageText
+        messageAuthor
+        createdAt
     }
   }
 `;

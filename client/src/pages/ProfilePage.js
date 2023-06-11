@@ -1,6 +1,6 @@
 import React from "react";
-import ProfileHeader from "./ProfileHeader";
-import FriendList from "../friends/Friends";
+import ProfileHeader from "../components/profile/ProfileHeader";
+import FriendList from "../components/friends/Friends";
 
 const ProfilePage = ({ userInfo, userPosts, plannedTrips }) => {
   return (

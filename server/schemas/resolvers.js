@@ -25,7 +25,7 @@ const resolvers = {
         .populate("messages");
     },
     // get a user by username
-    user: async (parent, { username }) => {
+    users: async (parent, { username }, context) => {
       return User.findOne({ username })
         .select("-__v -posts -comments -messages -trips")
         .populate("friends")
@@ -36,24 +36,23 @@ const resolvers = {
     },
 
     // get a user by _id
-    me: async (parent, args, context) => {
+    me: async (parent, { _id }, context) => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
+        const user = await User.findById(_id || { _id: context.user._id })
           .select("-__v -posts -comments -messages -trips")
-          .populate("friends")
-          .populate("trips")
-          .populate("posts")
-          .populate("comments")
-          .populate("messages");
-        return userData;
+          .populate({ path: "friends", model: "User" })
+          .populate({ path: "trips", model: "Trip" })
+          .populate({ path: "posts", model: "Post" })
+          .populate({ path: "comments", model: "Comment" })
+          .populate({ path: "messages", model: "Message" });
+        return user;
       }
       throw new AuthenticationError("Not logged in");
     },
 
     // get all posts
-    posts: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Post.find(params).sort({ createdAt: -1 });
+    posts: async (parent, args) => {
+      return await Post.find().sort({ createdAt: -1 });
     },
 
     // get a post by _id
@@ -62,13 +61,16 @@ const resolvers = {
       if (!_id) {
         throw new Error("No post found with this id!");
       }
-      return Post.findOne(params);
+      return await Post.findById(params)
+        .populate("postAuthor")
+        .populate("comments");
     },
 
     // get comments by postId
-    comments: async (parent, { postId }) => {
-      const params = postId ? { postId } : {};
-      return Comment.find(params).sort({ createdAt: -1 });
+
+    comments: async (parent, { postId }, context) => {
+      const params = postId ? { postId: parent.id } : {};
+      return await context.Comment.find(params).sort({ createdAt: -1 });
     },
 
     // get a comment by _id
@@ -119,132 +121,151 @@ const resolvers = {
           stop: ["\n", " Human:", " AI:"],
         },
         amessage: amessage,
+      });
+      return completion;
+    },
+  },
 
-        Mutation: {
-          // login a user
-          login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
-            if (!user) {
-              throw new AuthenticationError("Incorrect credentials");
-            }
-            const correctPw = await user.isCorrectPassword(password);
-            if (!correctPw) {
-              throw new AuthenticationError("Incorrect credentials");
-            }
-            const token = signToken(user);
-            return { token, user };
-          },
+  Mutation: {
+    
+    // add a user
+  
+    addUser: async (_, { username, firstName, email, password }) => {
+      const user = await User.create({username, firstName, email, password });
+      const token = signToken(user);
+      return { token, user };
+    },
+    
+    
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new AuthenticationError("Incorrect credentials");
+      }
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw) {
+        throw new AuthenticationError("Incorrect credentials");
+      }
+      const token = signToken(user);
+      return { token, user };
+    },
+    updateUserAgreement: async (parent, { email, hasAgreed }, context) => {
+      if (context.user) {
+        try {
+          const user = await User.findOneAndUpdate(
+            { email: context.user.email },
+            { $push: { "UserAgreement.hasAgreed": hasAgreed } },
+            { hasAgreed },
+            { new: true }
+          );
+          if (!user) {
+            throw new Error("User not found");
+          }
+          return {
+            email: user.email,
+            hasAgreed: user.userAgreement.hasAgreed,
+          };
+        } catch (error) {
+          throw new Error(error);
+        }}},
+      
 
-          // add a user
-          addUser: async (parent, { username, firstName, email, password }) => {
-            const user = await User.create({
-              username,
-              firstName,
-              email,
-              password,
-            });
-            const token = signToken(user);
-            return { token, user };
-          },
 
-          // add a trip
-          addTrip: async (parent, args, context) => {
-            if (context.user) {
-              const trip = await Trip.create({
-                ...args,
-                username: context.user.username,
-              });
-              const updatedUser = await User.findByIdAndUpdate(
-                { _id: context.user._id },
-                { $push: { trips: trip._id } },
-                { new: true }
-              );
-              return updatedUser;
-            }
-            throw new AuthenticationError("You need to be logged in!");
-          },
+  // add a trip
+  addTrip: async (parent, args, context) => {
+    if (context.user) {
+      const trip = await Trip.create({
+        ...args,
+        username: context.user.username,
+      });
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $push: { trips: trip._id } },
+        { new: true }
+      );
+      return updatedUser;
+    }
+    throw new AuthenticationError("You need to be logged in!");
+  },
 
-          // add a post
-          addPost: async (parent, args, context) => {
-            if (context.user) {
-              const post = await Post.create({
-                ...args,
-                username: context.user.username,
-              });
-              const updatedUser = await User.findByIdAndUpdate(
-                { _id: context.user._id },
-                { $push: { posts: post._id } },
-                { new: true }
-              );
-              return updatedUser;
-            }
-            throw new AuthenticationError("You need to be logged in to post !");
-          },
+  // add a post
+  addPost: async (parent, args, context) => {
+    if (context.user) {
+      const post = await Post.create({
+        ...args,
+        username: context.user.username,
+      });
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { $push: { posts: post._id } },
+        { new: true }
+      );
+      return updatedUser;
+    }
+    throw new AuthenticationError("You need to be logged in to post !");
+  },
 
-          // add a comment
-          addComment: async (parent, { postId, commentBody }, context) => {
-            if (context.user) {
-              const updatedPost = await Post.findOneAndUpdate(
-                { _id: postId },
-                {
-                  $push: {
-                    comments: { commentBody, username: context.user.username },
-                  },
-                },
-                { new: true, runValidators: true }
-              );
-              return updatedPost;
-            }
-            throw new AuthenticationError(
-              "You need to be logged in to comment !"
-            );
+  // add a comment
+  addComment: async (parent, { postId, commentBody }, context) => {
+    if (context.user) {
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: postId },
+        {
+          $push: {
+            comments: { commentBody, username: context.user.username },
           },
+        },
+        { new: true, runValidators: true }
+      );
+      return updatedPost;
+    }
+    throw new AuthenticationError("You need to be logged in to comment !");
+  },
 
-          // add a friend
-          addFriend: async (parent, { username }, context) => {
-            if (context.user) {
-              const updatedUser = await User.findOneAndUpdate(
-                { _id: context.user._id },
-                { $addToSet: { friends: username } },
-                { new: true }
-              ).populate("friends");
-              return updatedUser;
-            }
-            throw new AuthenticationError(
-              "You need to be logged in to add a friend !"
-            );
-          },
+  // add a friend
+  addFriend: async (parent, { username }, context) => {
+    if (context.user) {
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: context.user._id },
+        { $addToSet: { friends: username } },
+        { new: true }
+      ).populate("friends");
+      return updatedUser;
+    }
+    throw new AuthenticationError("You need to be logged in to add a friend !");
+  },
 
-          // add a message
-          newMessage: async (parent, { messageText, recipient }, context) => {
-            const newMessage = await Message.create({
-              messageText,
-              recipient,
-              sender: context.user.username,
-              messageAuthor: context.user._id,
-            });
-            return newMessage;
-          },
+  // add a message
+  newMessage: async (parent, { messageText, recipient }, context) => {
+    const newMessage = await Message.create({
+      messageText,
+      recipient,
+      sender: context.user.username,
+      messageAuthor: context.user._id,
+    });
+    return newMessage;
+  },
 
-          // remove a trip
-          removeTrip: async (parent, { tripId }, context) => {
-            const user = await User.findOneAndUpdate(
-              { _id: context.user._id },
-              { $pull: { trips: tripId } },
-              { new: true }
-            );
-            return user;
-          },
+  // remove a trip
+  removeTrip: async (parent, { tripId }, context) => {
+    const user = await User.findOneAndUpdate(
+      { _id: context.user._id },
+      { $pull: { trips: tripId } },
+      { new: true }
+    );
+    return user;
+  },
 
-          // remove a post
-          removePost: async (parent, { postId }, context) => {
-            const user = await User.findOneAndUpdate(
-              { _id: context.user._id },
-              { $pull: { posts: postId } },
-              { new: true }
-            );
-            return user;
-          },
+  // remove a post
+  removePost: async (parent, { postId }, context) => {
+    const user = await User.findOneAndUpdate(
+      { _id: context.user._id },
+      { $pull: { posts: postId } },
+      { new: true }
+    );
+    return user;
+  },
+
 
           // remove a comment
           removeComment: async (parent, { postId, _id }, context) => {
@@ -256,50 +277,49 @@ const resolvers = {
             return updatedPost;
           },
 
-          // remove a friend
-          removeFriend: async (parent, { friendId }, context) => {
-            const updatedUser = await User.findOneAndUpdate(
-              { _id: context.user._id },
-              { $pull: { friends: friendId } },
-              { new: true }
-            ).populate("friends");
-            return updatedUser;
-          },
 
-          // remove a message
-          deleteMessage: async (parent, { messageId }, context) => {
-            const deletedMessage = await Message.findOneAndDelete({
-              _id: messageId,
-              messageAuthor: context.user._id,
-            });
-            return deletedMessage;
-          },
-
-          createChatCompletion: async (_, { model, amessages }) => {
-            try {
-              const response = await axios.post(
-                "https://api.openai.com/v1/chat/completions", // This URL may need to be updated
-                {
-                  model,
-                  amessages,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-
-              return response.data;
-            } catch (error) {
-              throw new Error(error);
-            }
-          },
-        },
-      });
-    },
+  // remove a friend
+  removeFriend: async (parent, { friendId }, context) => {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: context.user._id },
+      { $pull: { friends: friendId } },
+      { new: true }
+    ).populate("friends");
+    return updatedUser;
   },
+
+  // remove a message
+  deleteMessage: async (parent, { messageId }, context) => {
+    const deletedMessage = await Message.findOneAndDelete({
+      _id: messageId,
+      messageAuthor: context.user._id,
+    });
+    return deletedMessage;
+  },
+
+  createChatCompletion: async (_, { model, amessages }) => {
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions", // This URL may need to be updated
+        {
+          model,
+          amessages,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+}
 };
+
 
 module.exports = resolvers;

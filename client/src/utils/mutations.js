@@ -62,6 +62,15 @@ export const ADD_POST = gql`
   }
 `;
 
+export const UPDATE_USER_AGREEMENT =gql`
+mutation UpdateUserAgreement($email:String!,$hasAgreed:Boolean!){
+  updateUserAgreement(email:$email,hasAgreed:$hasAgreed){
+    email
+    hasAgreed
+  }
+}
+`;
+
 export const ADD_COMMENT = gql`
   mutation addComment(
     $postId: ID!

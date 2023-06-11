@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+const { AuthenticationError } = require("apollo-server-express");
 const secret = 'mysecretssshhhhhhh';
 const expiration = '2h';
 
@@ -28,4 +28,10 @@ module.exports = {
     const payload = { email, username, _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
+
+  UserAuthenticated: function (context, err = "You must be logged in to do that!"){
+    if(!context.user){
+      throw new AuthenticationError(err);
+    }
+  }
 };

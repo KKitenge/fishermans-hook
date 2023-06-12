@@ -8,7 +8,7 @@ import { AppStateContext } from '../../app-state';
 
 
 export default function PostsPage() {
-  const { appState: { user, posts }, addPost } = useContext(AppStateContext);
+  const { appState: { user, posts }, addPost} = useContext(AppStateContext);
   const [AddPost] = useMutation(ADD_POST);
   const [open, setOpen] = useState(false);
   const [postTitle, setPostTitle] = useState('');

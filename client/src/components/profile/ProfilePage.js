@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { AppStateContext } from '../../app-state';
+import ChatApp from '../messages/ChatApp';
 
 function ProfilePage() {
   const { appState: { user } } = useContext(AppStateContext);
@@ -39,6 +40,7 @@ function ProfilePage() {
         fullWidth
         margin="normal"
       />
+      <ChatApp />
     </div>
   );
 }

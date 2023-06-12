@@ -6,7 +6,7 @@ import LoginPage from './components/auth/LoginPage';
 import SignupPage from './components/auth/SignupPage';
 import ProfilePage from './components/profile/ProfilePage';
 import FriendsPage from './components/friends';
-// import Messages from './components/messages';
+import Messages from './components/messages';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HamburgerMenu from './components/common/hamburgermenu';
@@ -55,7 +55,7 @@ function ProtectedRoutes() {
     <Routes>
       <Route path="/" element={<PostsPage />} />
       <Route path="/profile" element={<ProfilePage />} />
-      {/* <Route path="/messages" element={<Messages />} /> */}
+      <Route path="/messages" element={<Messages />} />
       <Route path="/friends" element={<FriendsPage />} />
     </Routes>);
 }

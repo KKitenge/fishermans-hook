@@ -23,14 +23,15 @@ const userSchema = new Schema({
     required: [true, "Password cannot be blank"],
     minlength: 5,
   },
-  friends: [
-    {
-      username: {
-        type: String,
-        required: true,
+  friends: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
-    },
-  ],
+    ],
+    default: []
+  },
   trips: [
     {
       destination: {
@@ -45,26 +46,10 @@ const userSchema = new Schema({
   ],
   posts: [
     {
-      postTitle: {
-        type: String,
-        required: true,
-      },
-      postText: {
-        type: String,
-        required: true,
-      },
-      postAuthor: {
-        type: String,
-        required: true,
-      },
-    }
+      type: Schema.Types.ObjectId,
+      ref: "Post",
+    },
   ],
-  // posts: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "Post",
-  //   },
-  // ],
   comments: [
     {
       type: Schema.Types.ObjectId,

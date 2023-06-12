@@ -225,7 +225,11 @@ const resolvers = {
   // add a friend
   addFriend: async (parent, { username }, context) => {
     if (context.user) {
+      // add friend to current user
       const updatedUser = await User.findOneAndUpdate(
+        // find current user
+        // add friend to friends array
+        // return new user
         { _id: context.user._id },
         { $addToSet: { friends: username } },
         { new: true }

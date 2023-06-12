@@ -25,7 +25,7 @@ const typeDefs = gql`
         _id: ID
         postTitle: String!
         postText: String!
-        postAuthor: [User]
+        postAuthor: String!
         createdAt: String
         comments: [Comment]
     }
@@ -104,37 +104,33 @@ const typeDefs = gql`
     input AMessagesInput {
         role: String!
         content: String!
-      }
+    }
     
-      type ChatCompletion {
+    type ChatCompletion {
         id: ID!
         object: String!
         created: Int!
         model: String!
         usage: Usage!
         choices: [Choice!]!
-     
-      }
-    
-      type Usage {
+    }
+
+    type Usage {
         prompt_tokens: Int!
         completion_tokens: Int!
         total_tokens: Int!
-      }
-    
-      type Choice {
+    }
+
+    type Choice {
         amessages: [AMessages!]
         finish_reason: String!
-      }
-    
-      type AMessages {
+    }
+
+    type AMessages {
         role: String!
         content: String!
-      }
+    }
       
-
-
-  
     type Query {
         me: User
         users: [User]

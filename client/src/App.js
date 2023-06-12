@@ -1,82 +1,61 @@
-import React from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import logo from "./logo.svg";
-import "./App.css";
-import Signup from "./components/auth/Signup";
-import LandingPage from "./components/auth/LandingPage";
-import Login from "./components/auth/LoginForm.js";
-import ProfilePage from "./components/profile/ProfilePage.js";
-import Messages from "./components/messages/ChatWidget.js";
-import Posts from "./components/posts/Posts.js";
-import Trips from "./components/trips/Trips.js";
-import Friends from "./components/friends/Friends.js";
-import Forecast from "./components/forecast/Forecast.js";
-import Logout from "./components/home/Logout.js";
-
-const httpLink = createHttpLink({
-  uri: "/graphql",
-});
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("id_token");
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import './App.css';
+import PostsPage from './components/posts/PostsPage';
+import LoginPage from './components/auth/LoginPage';
+import SignupPage from './components/auth/SignupPage';
+import ProfilePage from './components/profile/ProfilePage';
+import FriendsPage from './components/friends';
+import Messages from './components/messages';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import HamburgerMenu from './components/common/hamburgermenu';
+import { Card, CardContent } from '@mui/material';
+import AuthService from './utils/auth';
+import { AppStateProvider } from './app-state';
 
 function App() {
+
   return (
-    <ApolloProvider client={client}>
+
+    <AppStateProvider>
       <Router>
         <div>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/trips" element={<Trips />} />
-            <Route path="/friends" element={<Friends />} />
-            <Route path="/forecast" element={<Forecast />} />
-            <Route path="/logout" element={<Logout />} />
-          </Routes>
+          <HamburgerMenu />
+          <Card className="container">
+            <CardContent>
+              <ToastContainer />
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="*" element={<ProtectedRoutes />} />
+              </Routes>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
       </Router>
-    </ApolloProvider>
+    </AppStateProvider>
   );
+}
+
+function ProtectedRoutes() {
+  const isAuthenticated = AuthService.loggedIn();
+  const history = useNavigate();
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      history("/login")
+    }
+  })
+  
+  return (
+    <Routes>
+      <Route path="/" element={<PostsPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/friends" element={<FriendsPage />} />
+    </Routes>);
 }
 
 export default App;

@@ -8,10 +8,10 @@ const userSchema = new Schema({
     unique: true,
     trim: true,
   },
-  // firstName: {
-  //   type: String,
-  //   required: [true, "Name cannot be blank"],
-  // },
+  firstName: {
+    type: String,
+    required: [true, "Name cannot be blank"],
+  },
   email: {
     type: String,
     required: [true, "Email cannot blank"],

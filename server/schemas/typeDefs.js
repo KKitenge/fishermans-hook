@@ -5,11 +5,10 @@ const typeDefs = gql`
     type User {
         _id: ID
         username: String!
-        firstName: String!
         email: String!
         friends: [User]
         trips: [Trip]
-        posts: [Post]
+        posts: [Post]!
         comments: [Comment]
         messages: [Message]
         userAgreement:[UserAgreement]
@@ -136,7 +135,7 @@ const typeDefs = gql`
         me: User
         users: [User]
         user(username: String!): User
-        post(_id: ID!): Post
+        post(postId: ID!): Post
         posts: [Post]
         comments(postId: ID!): [Comment]
         comment(commentId: ID!): Comment
@@ -158,7 +157,7 @@ const typeDefs = gql`
         newMessage(messageText: String!, username: String!): Message
         addTrip(username: String!, destination: String!, time: String!): Trip
         addFriend(username: String!): User
-        removeFriend(username: String!): User
+        removeFriend(friendId: String!): User
         removePost(postId: ID!): Post
         removeComment(postId: ID!, commentId: ID!): Post
         deleteMessage(messageId: ID!): Message

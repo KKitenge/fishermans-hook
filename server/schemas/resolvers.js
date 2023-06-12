@@ -25,7 +25,7 @@ const resolvers = {
         .populate("messages");
     },
     // get a user by username
-    users: async (parent, { username }, context) => {
+    users: async (parent, { username }) => {
       return User.findOne({ username })
         .select("-__v -posts -comments -messages -trips")
         .populate("friends")
@@ -36,47 +36,46 @@ const resolvers = {
     },
 
     // get a user by _id
-    me: async (parent, { _id }, context) => {
+    me: async (parent, args, context) => {
       if (context.user) {
-        const user = await User.findById(_id || { _id: context.user._id })
+        const userData = await User.findOne({_id: context.user._id })
           .select("-__v -posts -comments -messages -trips")
-          .populate({ path: "friends", model: "User" })
-          .populate({ path: "trips", model: "Trip" })
-          .populate({ path: "posts", model: "Post" })
-          .populate({ path: "comments", model: "Comment" })
-          .populate({ path: "messages", model: "Message" });
-        return user;
+          .populate("friends")
+          .populate("trips")
+          .populate({ path: "posts", populate: { path: "comments", model: "Comment" } })
+          .populate("comments")
+          .populate("messages");
+
+        return userData;
       }
       throw new AuthenticationError("Not logged in");
     },
 
     // get all posts
     posts: async (parent, args) => {
-      return await Post.find().sort({ createdAt: -1 });
+      const params = username ? { username } : {};
+      return await Post.find(params).sort({ createdAt: -1 });
     },
 
     // get a post by _id
-    post: async (parent, { _id }) => {
-      const params = _id ? { _id } : {};
-      if (!_id) {
+    post: async (parent, { postid }) => {
+      const params =postid ? { postid } : {};
+      if (!postId) {
         throw new Error("No post found with this id!");
       }
-      return await Post.findById(params)
-        .populate("postAuthor")
-        .populate("comments");
+      return Post.findOne(params);
     },
 
     // get comments by postId
-
-    comments: async (parent, { postId }, context) => {
-      const params = postId ? { postId: parent.id } : {};
-      return await context.Comment.find(params).sort({ createdAt: -1 });
+    comments: async (parent, { postId }) => {
+      const params = postId ? { postId } : {};
+      return Comment.find(params).sort({ createdAt: -1 }).populate("comments");
     },
 
     // get a comment by _id
-    comment: async (parent, { _id }) => {
-      const params = _id ? { _id } : {};
-      if (!_id) {
+    comment: async (parent, { commentId }) => {
+      const params = commentId ? { commentId } : {};
+      if (!commentId) {
         throw new Error("No comment found with this id!");
       }
 
@@ -131,11 +130,15 @@ const resolvers = {
     // add a user
   
     addUser: async (parent, { username, firstName, email, password }) => {
-      const user = await User.create({username, firstName, email, password });
+      const user = await User.create({
+        username, 
+        firstName, 
+        email, 
+        password 
+      });
       const token = signToken(user);
       return { token, user };
     },
-    
     
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
@@ -149,6 +152,7 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
+
     updateUserAgreement: async (parent, { email, hasAgreed }, context) => {
       if (context.user) {
         try {
@@ -190,6 +194,7 @@ const resolvers = {
 
   // add a post
   addPost: async (parent, args, context) => {
+
     if (context.user) {
       const post = await Post.create({
         ...args,
@@ -200,7 +205,7 @@ const resolvers = {
         { $push: { posts: post._id } },
         { new: true }
       );
-      return updatedUser;
+      return post;
     }
     throw new AuthenticationError("You need to be logged in to post !");
   },
@@ -271,15 +276,15 @@ const resolvers = {
   },
 
 
-          // remove a comment
-          removeComment: async (parent, { postId, _id }, context) => {
-            const updatedPost = await Post.findOneAndUpdate(
-              { _id: postId },
-              { $pull: { comments: { _id: _id } } },
-              { new: true }
-            );
-            return updatedPost;
-          },
+  // remove a comment
+  removeComment: async (parent, { postId, _id }, context) => {
+    const updatedPost = await Post.findOneAndUpdate(
+      { _id: postId },
+      { $pull: { comments: { _id: _id } } },
+      { new: true }
+    );
+    return updatedPost;
+  },
 
 
   // remove a friend

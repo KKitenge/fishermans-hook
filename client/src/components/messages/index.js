@@ -4,6 +4,7 @@ import { QUERY_MESSAGES } from '../../utils/queries';
 import { useLazyQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { Card, CardContent, Typography } from '@mui/material';
+import ChatApp from '../messages/ChatApp';
 
 /**
  * @typedef {Object} Message
@@ -58,7 +59,7 @@ function Messages() {
         <Typography variant="body2" >
           No messages
         </Typography>}
-
+      <ChatApp />
     </div>
   )
 }

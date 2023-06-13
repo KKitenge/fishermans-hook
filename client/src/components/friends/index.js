@@ -71,7 +71,7 @@ function FriendsPage() {
       {loading && <div>Loading...</div>}
 
       {/* if data, map through data.users */}
-      {data && data.users.map((user) => (
+      {data && data.users && data.users.map((user) => (
         // return Card with user._id as key
         <Card key={user._id} sx={{ marginBottom: '1rem' }} variant='outlined'>
           <CardContent>

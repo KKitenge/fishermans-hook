@@ -9,6 +9,7 @@ const morgan = require("morgan");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+// this is the middleware that will allow us to parse the incoming string or array data
 app.use(morgan("short"));
 
 const server = new ApolloServer({

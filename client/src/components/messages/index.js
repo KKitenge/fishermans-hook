@@ -57,7 +57,7 @@ function Messages() {
       }
       {(data && data.messages.length === 0) &&
         <Typography variant="body2" >
-          No messages
+          
         </Typography>}
       <ChatApp />
     </div>

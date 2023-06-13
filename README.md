@@ -1,6 +1,6 @@
 # Fisherman's Hook
 
-# Title
+## Description
 ![logo](/client/src/components/assets/images/logo3.png)  
 
 An application that helps people interested in fishing find popular locations to fish and explore. 
@@ -14,12 +14,8 @@ An application that helps people interested in fishing find popular locations to
 * [Technology Used](#technology-used)
 * [Usage](#usage)
 * [Site Responsiveness](#site-responsiveness)
-* [Credits](#credits)
 * [License](#License)
 
-## Description
-Additionally, information about the type of fish, best times and weather can be gathered.
-<br>
 
 ## User Story
 
@@ -29,6 +25,26 @@ I want to be able ot create an account so that I can access the site. This requi
 
 
 ## Site Responsiveness
+[Video Link](https://app.screencast.com/G3vJEQc4Z3SbH)
+
+Registration
+![Registration](/client/src/components/assets/images/RegisterDemo.gif)  
+
+Login
+![Login](/client/src/components/assets/images/Login%26PostDemo.gif)  
+
+Navigation
+![Navigation](/client/src/components/assets/images/NavDemo.gif)  
+
+
+![Post](/client/src/components/assets/images/Post_Image.png)  
+
+
+![Friends](/client/src/components/assets/images/FriendsPage.png)  
+
+![Message](/client/src/components/assets/images/Message%26Nav.png)  
+
+
 
 ## Technologies Used
 * [Git](https://git-scm.com/)
@@ -48,16 +64,36 @@ I want to be able ot create an account so that I can access the site. This requi
 * [ChatEngine](https://chatengine.io/)
 
 ## Usage
+At the live site, register an account.   
+
+![registeracct](/client/src/components/assets/images/reg.png)
+
+Proceed to log in, create a new post.   
+
+![loginpost](/client/src/components/assets/images/login.png)
+
+
+Navigate to the hamburger menu and view messages, or friends to view and add as well as chat.  
+![menu](/client/src/components/assets/images/menu.png)  
+![friendpage](/client/src/components/assets/images/friend.png)
+
+
 
 ## Learning Points
- Learn, Adapt, Retry
+Learn, Adapt, Retry 
+
+When working with AI models you have an option  to train them. There are three roles when  shaping your  ai counterpart as a developer  the system: this is where you give the model direction and a character you can literally tell it who you to be and how to be Then there is the user role who will influence your ai model any way they see fit and lastly the most influential is content and context best practices are to feed the machine prompts behind the scenes these are prompts that user do not see or know about  
+![API](/client/src/components/assets/images/Screenshot%202023-06-12%20112513.png)
 
 
 ## License
 [MIT](https://opensource.org/license/mit/) License 
 
 ## Team
-*[R. Sanchez](https://github.com/RogelioSan09)
-*[S. Sanchez](https://github.com/Ss0110)
-*[E. Ogbeide](https://github.com/eogbeide424)
+*[R. Sanchez](https://github.com/RogelioSan09)  
+
+*[S. Sanchez](https://github.com/Ss0110)  
+
+*[E. Ogbeide](https://github.com/eogbeide424)  
+
 *[K. Kitenge](https://github.com/KKitenge)

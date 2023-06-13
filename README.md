@@ -1,6 +1,8 @@
 # Fisherman's Hook
 
 # Title
+![logo](/client/src/components/assets/images/logo3.png)  
+
 An application that helps people interested in fishing find popular locations to fish and explore. 
 <br>
 [Live Site](https://hidden-thicket-19900.herokuapp.com/)
@@ -21,6 +23,11 @@ Additionally, information about the type of fish, best times and weather can be 
 
 ## User Story
 
+![WireFrame](/client/src/components/assets/images/wireframe%20(1).png)
+
+I want to be able ot create an account so that I can access the site. This requires a signup form requesting username, email and password. I want to log into my account and access features of the website including a firends list, forums and weather search. A sign in page that checks user information is required. I want to also be able to create, view and comment on posts, interacting with the wider community. A post page with input fields for submission and automatic refresh. Continuing with the comunity, I want to see a list of potential friends that I am then able to add to my list.
+
+
 ## Site Responsiveness
 
 ## Technologies Used
@@ -38,11 +45,12 @@ Additionally, information about the type of fish, best times and weather can be 
 * [MUI Core](https://www.npmjs.com/package/@mui/material)
 * [React Toastify](https://www.npmjs.com/package/react-toastify)
 * [OpenAPI](https://chat-api.com/en/)
-* [ChatEngine]https://chatengine.io/
+* [ChatEngine](https://chatengine.io/)
 
 ## Usage
 
 ## Learning Points
+ Learn, Adapt, Retry
 
 
 ## License

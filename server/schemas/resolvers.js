@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User, Post, Comment, Message } = require("../models/index");
+const { User, Post, Comment, Message } = require("../models");
 const { signToken } = require("../utils/auth");
 require("dotenv").config();
 const { Configuration, OpenAIApi } = require("openai");
@@ -52,9 +52,9 @@ const resolvers = {
     },
 
     // get all posts
-    posts: async (parent, args) => {
+    posts: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return await Post.find(params).sort({ createdAt: -1 });
+      return Post.find(params).sort({ createdAt: -1 });
     },
 
     // get a post by _id
@@ -127,8 +127,7 @@ const resolvers = {
 
   Mutation: {
     
-    // add a user
-  
+    // add a user 
     addUser: async (parent, { username, firstName, email, password }) => {
       const user = await User.create({
         username, 
@@ -198,7 +197,7 @@ const resolvers = {
     if (context.user) {
       const post = await Post.create({
         ...args,
-        username: context.user.username,
+        postAuthor: context.user.username,
       });
       const updatedUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
@@ -211,18 +210,20 @@ const resolvers = {
   },
 
   // add a comment
-  addComment: async (parent, { postId, commentBody }, context) => {
+  addComment: async (parent, { postId, commentText }, context) => {
     if (context.user) {
+      const comment = await Comment.create({ commentText, commentAuthor: context.user.username });
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         {
           $push: {
-            comments: { commentBody, username: context.user.username },
+            comments: comment._id,
           },
         },
         { new: true, runValidators: true }
-      );
-      return updatedPost;
+      ).populate('comments');
+
+      return updatedPost
     }
     throw new AuthenticationError("You need to be logged in to comment !");
   },

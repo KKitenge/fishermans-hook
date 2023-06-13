@@ -1,6 +1,7 @@
 [
   {
     "username": "AMay",
+    "firstName": "Allie",
     "email": "april@junejuly.com",
     "password": "password123",
     "friends": [
@@ -10,27 +11,11 @@
       {
         "username": "CJuly"
       }
-    ],
-    "trips": [
-      {
-        "destination": "Guatemala",
-        "time": "2023-06-01"
-      },
-      {
-        "destination": "Tokyo",
-        "time": "2023-08-15"
-      }
-    ],
-    "posts": [
-      {
-        "postTitle": "What type of fish is this?",
-        "postText": "This is my first post.",
-        "postAuthor": "AMay"
-      }
     ]
   },
   {
     "username": "BJune",
+    "firstName": "Beulah",
     "email": "june@junejuly.com",
     "password": "password123",
     "friends": [
@@ -40,20 +25,11 @@
       {
         "username": "CJuly"
       }
-    ],
-    "trips": [
-      {
-        "destination": "Belize",
-        "time": "2023-07-10"
-      },
-      {
-        "destination": "Caltalina Island",
-        "time": "2023-09-20"
-      }
     ]
   },
   {
     "username": "CJuly",
+    "firstName": "Callisto",
     "email": "july@junejuly.com",
     "password": "password123",
     "friends": [

@@ -14,6 +14,7 @@ import { Card, CardContent } from '@mui/material';
 import AuthService from './utils/auth';
 import { AppStateProvider } from './app-state';
 import Footer from './components/common/Footer';
+import logo3 from './components/assets/images/logo3.png'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <HamburgerMenu />
           <Card className="container">
             <CardContent>
+            <img src={logo3} alt='logo3'/>
               <ToastContainer />
               <Routes>
                 <Route path="/login" element={<LoginPage />} />

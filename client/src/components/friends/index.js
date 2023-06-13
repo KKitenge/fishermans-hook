@@ -72,6 +72,7 @@ function FriendsPage() {
 
       {/* if data, map through data.users */}
       {data && data.users && data.users.map((user) => (
+
           // return Card with user._id as key
           <Card key={user._id} sx={{ marginBottom: "1rem" }} variant="outlined">
             <CardContent>
@@ -109,6 +110,15 @@ function FriendsPage() {
                     {" Add "}
                   </Button>
                 )}
+
+        // return Card with user._id as key
+        <Card key={user._id} sx={{ marginBottom: '1rem' }} variant='outlined'>
+          <CardContent>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box>
+                <Typography variant="subtitle1">{user.username}</Typography>
+                <Typography variant="body2">{user.firstName}</Typography>
+
               </Box>
             </CardContent>
           </Card>

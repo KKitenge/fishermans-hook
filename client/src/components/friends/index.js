@@ -65,52 +65,14 @@ function FriendsPage() {
   // return JSX for FriendsPage
   return (
     <div>
-      <h1 className="text-center">Friends</h1>
+      <h1 className='text-center'>
+        Friends
+      </h1>
       {/* if error, display error */}
-      {error && <div className="error">Error: {error.message}</div>}
+      {error && <div className='error'>Error: {error.message}</div>}
       {loading && <div>Loading...</div>}
-
       {/* if data, map through data.users */}
       {data && data.users && data.users.map((user) => (
-
-          // return Card with user._id as key
-          <Card key={user._id} sx={{ marginBottom: "1rem" }} variant="outlined">
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Box>
-                  <Typography variant="subtitle1">{user.username}</Typography>
-                  <Typography variant="body2">{user.firstName}</Typography>
-                </Box>
-                {/* if isFriend(user._id), display Remove Button, else display Add Button */}
-                {isFriend(user._id) ? (
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    // when user clicks Remove Button, call handleRemoveFriend(user._id)
-                    onClick={() => handleRemoveFriend(user._id)}
-                    startIcon={<GroupIcon />}
-                  >
-                    Remove
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    startIcon={<PersonAddIcon />}
-                    onClick={() => handleAddFriend(user)}
-                  >
-                    {" Add "}
-                  </Button>
-                )}
-
         // return Card with user._id as key
         <Card key={user._id} sx={{ marginBottom: '1rem' }} variant='outlined'>
           <CardContent>
@@ -118,13 +80,30 @@ function FriendsPage() {
               <Box>
                 <Typography variant="subtitle1">{user.username}</Typography>
                 <Typography variant="body2">{user.firstName}</Typography>
-
               </Box>
-            </CardContent>
-          </Card>
-        ))}
+              {/* if isFriend(user._id), display Remove Button, else display Add Button */}
+              {isFriend(user._id) ? <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                // when user clicks Remove Button, call handleRemoveFriend(user._id)
+                onClick={() => handleRemoveFriend(user._id)}
+                startIcon={<GroupIcon />}>Remove</Button> :
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  startIcon={<PersonAddIcon />}
+                  onClick={() => handleAddFriend(user)}
+                >
+                  {" Add "}
+                </Button>
+              }
+            </Box>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
-
 export default FriendsPage;
